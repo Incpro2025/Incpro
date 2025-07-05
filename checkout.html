@@ -74,7 +74,7 @@
       })
       .then(res => res.text())
       .then(msg => {
-        alert(msg || "Order received!");
+        console.log(msg || "Order received!");
         form.reset();
         window.location.href = "thankyou.html";
       })
