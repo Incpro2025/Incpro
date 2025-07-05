@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Train Toy – Incpro</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+  <header>
+    <h1>🚂 Train Toy</h1>
+    <nav>
+      <a href="../index.html">Home</a>
+      <a href="../products.html">Products</a>
+    </nav>
+  </header>
+
+  <div class="checkout-container">
+    <img src="https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4" alt="Train Toy" style="width:100%; max-width:500px;" />
+    <h2>₹799.00</h2>
+    <ul>
+      <li>Battery-operated engine with light and sound</li>
+      <li>Real smoke effect for realistic fun</li>
+      <li>Includes track, bridge, and trees</li>
+    </ul>
+
+    <div class="product-actions">
+      <button onclick="addToCart('Train Toy', 799)">Add to Cart</button>
+      <a href="../checkout.html?product=Train%20Toy&price=799">
+        <button>Buy Now</button>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Incpro</p>
+  </footer>
+
+  <script>
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push({ name, price });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      window.location.href = "../cart.html";
+    }
+  </script>
+</body>
+</html>
