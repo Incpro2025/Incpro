@@ -82,3 +82,18 @@ footer {
   padding: 1rem;
   margin-top: 4rem;
 }
+.product {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+  margin: 1rem;
+  width: 250px;
+  text-align: center;
+}
+
+.product:hover {
+  transform: scale(1.03);
+}
+
