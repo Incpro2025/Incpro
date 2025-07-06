@@ -39,7 +39,7 @@
   <script>
     function addToCart(name, price) {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ name, price });
+      cart.push({ name, price, image: "https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4" });
       localStorage.setItem("cart", JSON.stringify(cart));
       window.location.href = "../cart.html";
     }

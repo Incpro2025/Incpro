@@ -40,7 +40,7 @@
   <script>
     function addToCart(name, price) {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ name, price });
+      cart.push({ name, price, image: "https://drive.google.com/thumbnail?id=1-HHco3t_hKGtzwIxvN9kALeiGb03W07n" });
       localStorage.setItem("cart", JSON.stringify(cart));
       window.location.href = "../cart.html";
     }
