@@ -19,40 +19,49 @@
       background: white;
       padding: 2rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      text-align: center;
     }
     h1 { color: #2b6cb0; }
     .order-summary {
-      text-align: left;
       margin-top: 2rem;
+      background: #f9fafb;
+      padding: 1rem;
+      border-left: 4px solid #2b6cb0;
+      border-radius: 6px;
     }
     .order-summary ul {
       list-style: none;
       padding-left: 0;
     }
     .order-summary li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .order-summary img {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
     .total {
       font-weight: bold;
-      margin-top: 1rem;
       text-align: right;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🎉 Thank You for Your Order!</h1>
+    <h1>🎉 Thank You!</h1>
   </header>
 
   <div class="thankyou-container">
-    <p>Hi <span id="customer-name">Customer</span>, your order has been placed successfully.</p>
+    <p>Hi <strong id="customer-name">Customer</strong>, your order has been successfully placed!</p>
 
-    <div class="order-summary" id="order-summary">
-      <!-- Order details will be injected here -->
-    </div>
+    <div class="order-summary" id="order-summary"></div>
 
-    <p style="margin-top: 2rem;">We’ll send you a confirmation email shortly. Your items will be shipped soon!</p>
+    <p style="margin-top: 2rem;">We’ll send you a confirmation email shortly. Your items will be shipped soon 🚚</p>
   </div>
 
   <footer>
@@ -60,33 +69,32 @@
   </footer>
 
   <script>
-    // Optional: simulate order ID
-    const orderId = "INC" + Math.floor(Math.random() * 1000000);
-
-    // Get customer name from previous form (if stored)
     const name = localStorage.getItem("customerName") || "Customer";
     document.getElementById("customer-name").textContent = name;
 
     const summary = document.getElementById("order-summary");
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const order = JSON.parse(localStorage.getItem("orderSummary")) || [];
     let total = 0;
 
-    if (cart.length === 0) {
+    if (order.length === 0) {
       summary.innerHTML = "<p>No order details found.</p>";
     } else {
-      let list = "<h3>🧾 Order Summary</h3><ul>";
-      cart.forEach(item => {
-        const qty = item.quantity || 1;
-        const subtotal = item.price * qty;
-        list += `<li>${item.name} × ${qty} – ₹${subtotal}</li>`;
-        total += subtotal;
+      let list = "<h3>🛍️ Order Summary</h3><ul>";
+      order.forEach(item => {
+        const image = item.image || "images/placeholder.png";
+        list += `
+          <li>
+            <img src="${image}" alt="${item.name}" onerror="this.src='images/placeholder.png'" />
+            ${item.name} – ₹${item.price}
+          </li>`;
+        total += Number(item.price);
       });
       list += `</ul><div class="total">Total: ₹${total}</div>`;
       summary.innerHTML = list;
     }
 
-    // Optional: clear cart after showing
-    localStorage.removeItem("cart");
+    // Clean up after displaying
+    localStorage.removeItem("orderSummary");
   </script>
 </body>
 </html>
