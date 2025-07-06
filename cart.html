@@ -35,6 +35,7 @@
       padding: 0.75rem;
       border-bottom: 1px solid #ddd;
       text-align: left;
+      vertical-align: middle;
     }
     td img {
       width: 60px;
@@ -60,15 +61,9 @@
       text-decoration: none;
       margin-top: 1rem;
     }
-    .checkout-btn:hover {
-      background: #2d3748;
-    }
-    .clear-cart-btn {
-      background: #e53e3e;
-    }
-    .clear-cart-btn:hover {
-      background: #c53030;
-    }
+    .checkout-btn:hover { background: #2d3748; }
+    .clear-cart-btn { background: #e53e3e; }
+    .clear-cart-btn:hover { background: #c53030; }
     td button {
       padding: 0.4rem 0.8rem;
       background: #e53e3e;
@@ -77,9 +72,7 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    td button:hover {
-      background: #c53030;
-    }
+    td button:hover { background: #c53030; }
   </style>
 </head>
 <body>
@@ -117,7 +110,7 @@
   </footer>
 
   <script>
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const cartBody = document.getElementById("cart-body");
     const cartTotal = document.getElementById("cart-total");
     const checkoutLink = document.getElementById("checkout-link");
@@ -136,9 +129,10 @@
       }
 
       cart.forEach((item, index) => {
+        const imagePath = item.image || "https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4"; // fallback if image missing
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td><img src="${item.image}" alt="${item.name}" /></td>
+          <td><img src="${imagePath}" alt="${item.name}" onerror="this.src='https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4'" /></td>
           <td>${item.name}</td>
           <td>₹${item.price}</td>
           <td><button onclick="removeItem(${index})">Remove</button></td>

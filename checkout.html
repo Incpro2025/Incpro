@@ -4,17 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Incpro - Checkout</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
     body { margin: 0; font-family: sans-serif; background: #f3f3f3; }
     header { background: #111; color: white; padding: 1rem; text-align: center; }
     nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-    .checkout-container { max-width: 600px; margin: 2rem auto; background: white; padding: 2rem; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .checkout-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
     h2 { margin-bottom: 1rem; }
     label { display: block; margin-top: 1rem; font-weight: bold; }
-    input, select { width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    button { margin-top: 2rem; width: 100%; padding: 1rem; background: #111; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    input[readonly] {
+      background-color: #f5f5f5;
+      font-weight: bold;
+      color: #444;
+    }
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 1rem;
+      background: #111;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
     button:hover { background: #333; }
-    footer { background: #222; color: white; text-align: center; padding: 1rem; margin-top: 2rem; }
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+    .checkout-summary {
+      background: #f9fafb;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      border-left: 4px solid #2b6cb0;
+      border-radius: 6px;
+    }
+    .checkout-summary ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .checkout-summary li {
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 <body>
@@ -24,11 +72,12 @@
       <a href="index.html">Home</a>
       <a href="products.html">Products</a>
       <a href="cart.html">Cart</a>
-      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
   <div class="checkout-container">
+    <div id="cart-summary" class="checkout-summary"></div>
+
     <h2>Billing Details</h2>
     <form id="checkoutForm">
       <label for="name">Full Name</label>
@@ -48,6 +97,10 @@
         <option>Cash on Delivery</option>
       </select>
 
+      <!-- Hidden fields to capture summary -->
+      <input type="hidden" id="product" name="product" />
+      <input type="hidden" id="price" name="price" />
+
       <button type="submit">Place Order</button>
     </form>
   </div>
@@ -57,6 +110,49 @@
   </footer>
 
   <script>
+    const params = new URLSearchParams(window.location.search);
+    const singleProduct = params.get("product");
+    const singlePrice = params.get("price");
+
+    const cartSummary = document.getElementById("cart-summary");
+    const productInput = document.getElementById("product");
+    const priceInput = document.getElementById("price");
+
+    let total = 0;
+    let summaryText = "";
+
+    if (singleProduct && singlePrice) {
+      // Buy Now flow
+      summaryText = `<ul><li>${singleProduct} – ₹${singlePrice}</li></ul>`;
+      total = Number(singlePrice);
+      productInput.value = singleProduct;
+      priceInput.value = singlePrice;
+    } else {
+      // Cart flow
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        summaryText = `<p>Your cart is empty.</p>`;
+      } else {
+        let list = "";
+        let names = [];
+        cart.forEach(item => {
+          list += `<li>${item.name} – ₹${item.price}</li>`;
+          total += Number(item.price);
+          names.push(item.name);
+        });
+        summaryText = `<ul>${list}</ul>`;
+        productInput.value = names.join(", ");
+        priceInput.value = total;
+      }
+    }
+
+    cartSummary.innerHTML = `
+      <h3>🧾 Order Summary</h3>
+      ${summaryText}
+      <p><strong>Total:</strong> ₹${total}</p>
+    `;
+
+    // Submit to Google Apps Script
     document.getElementById("checkoutForm").addEventListener("submit", function(e) {
       e.preventDefault();
       const form = e.target;
@@ -65,7 +161,9 @@
         name: form.name.value,
         email: form.email.value,
         address: form.address.value,
-        payment: form.payment.value
+        payment: form.payment.value,
+        product: form.product.value,
+        price: form.price.value
       };
 
       fetch("https://script.google.com/macros/s/AKfycbxZiwMs2-IcfQkN5_DMxtF31HA7um5tO9Ul7jgmaWA3GnEm1h-ntKals6ugGqF2M-50/exec", {
@@ -76,6 +174,7 @@
       .then(msg => {
         console.log(msg || "Order received!");
         form.reset();
+        localStorage.removeItem("cart");
         window.location.href = "thankyou.html";
       })
       .catch(err => {

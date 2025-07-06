@@ -16,7 +16,7 @@
   </header>
 
   <div class="checkout-container">
-    <img src="https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4" alt="Train Toy" style="width:100%; max-width:500px;" />
+    <img src="https://drive.google.com/thumbnail?id=1KElu4RGRDbarA7_9OeUCOfff1yvC_nCD" alt="Train Toy" style="width:100%; max-width:500px;" />
     <h2>₹799.00</h2>
     <ul>
       <li>Battery-operated engine with light and sound</li>
@@ -39,7 +39,7 @@
   <script>
     function addToCart(name, price) {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      cart.push({ name, price });
+      cart.push({ name, price, image: "https://drive.google.com/thumbnail?id=1KElu4RGRDbarA7_9OeUCOfff1yvC_nCD" });
       localStorage.setItem("cart", JSON.stringify(cart));
       window.location.href = "../cart.html";
     }
