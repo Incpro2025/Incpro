@@ -3,14 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Incpro - Checkout</title>
+  <title>Checkout – Incpro</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body { margin: 0; font-family: sans-serif; background: #f3f3f3; }
-    header { background: #111; color: white; padding: 1rem; text-align: center; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    header, footer {
+      background: #111;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
     .checkout-container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 2rem auto;
       background: white;
       padding: 2rem;
@@ -42,13 +52,6 @@
       cursor: pointer;
     }
     button:hover { background: #333; }
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      margin-top: 2rem;
-    }
     .checkout-summary {
       background: #f9fafb;
       padding: 1rem;
@@ -61,7 +64,16 @@
       padding-left: 0;
     }
     .checkout-summary li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    .checkout-summary img {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -110,49 +122,90 @@
   </footer>
 
   <script>
-  const params = new URLSearchParams(window.location.search);
-  const singleProduct = params.get("product");
-  const singlePrice = params.get("price");
+    const params = new URLSearchParams(window.location.search);
+    const singleProduct = params.get("product");
+    const singlePrice = params.get("price");
 
-  const cartSummary = document.getElementById("cart-summary");
-  let total = 0;
-  let summaryHTML = "";
+    const cartSummary = document.getElementById("cart-summary");
+    const productInput = document.getElementById("product");
+    const priceInput = document.getElementById("price");
 
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let total = 0;
+    let summaryHTML = "";
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  if (singleProduct && singlePrice && cart.length === 0) {
-    // Buy Now fallback
-    summaryHTML = `
-      <ul>
-        <li>${singleProduct} – ₹${singlePrice}</li>
-      </ul>
-      <p><strong>Total:</strong> ₹${singlePrice}</p>
-    `;
-  } else if (cart.length > 0) {
-    let list = "";
-    cart.forEach(item => {
-      const image = item.image || "images/placeholder.png";
-      list += `
-        <li style="margin-bottom: 1rem;">
-          <img src="${image}" alt="${item.name}" style="width:50px; vertical-align:middle; margin-right:10px;" />
-          ${item.name} – ₹${item.price}
-        </li>
+    if (singleProduct && singlePrice && cart.length === 0) {
+      // Buy Now fallback
+      summaryHTML = `
+        <ul>
+          <li>${singleProduct} – ₹${singlePrice}</li>
+        </ul>
+        <p><strong>Total:</strong> ₹${singlePrice}</p>
       `;
-      total += Number(item.price);
-    });
-    summaryHTML = `
-      <ul>${list}</ul>
-      <p><strong>Total:</strong> ₹${total}</p>
+      productInput.value = singleProduct;
+      priceInput.value = singlePrice;
+    } else if (cart.length > 0) {
+      let list = "";
+      let names = [];
+      cart.forEach(item => {
+        const image = item.image || "images/placeholder.png";
+        list += `
+          <li>
+            <img src="${image}" alt="${item.name}" onerror="this.src='images/placeholder.png'" />
+            ${item.name} – ₹${item.price}
+          </li>
+        `;
+        total += Number(item.price);
+        names.push(item.name);
+      });
+      summaryHTML = `
+        <ul>${list}</ul>
+        <p><strong>Total:</strong> ₹${total}</p>
+      `;
+      productInput.value = names.join(", ");
+      priceInput.value = total;
+    } else {
+      summaryHTML = `<p>Your cart is empty.</p>`;
+    }
+
+    cartSummary.innerHTML = `
+      <h3>🧾 Order Summary</h3>
+      ${summaryHTML}
     `;
-  } else {
-    summaryHTML = `<p>Your cart is empty.</p>`;
-  }
 
-  cartSummary.innerHTML = `
-    <h3>🧾 Order Summary</h3>
-    ${summaryHTML}
-  `;
-</script>
+    // Submit to Google Apps Script
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
 
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        address: form.address.value,
+        payment: form.payment.value,
+        product: form.product.value,
+        price: form.price.value
+      };
+
+      // Optional: store name for thank you page
+      localStorage.setItem("customerName", form.name.value);
+
+      fetch("https://script.google.com/macros/s/AKfycbxZiwMs2-IcfQkN5_DMxtF31HA7um5tO9Ul7jgmaWA3GnEm1h-ntKals6ugGqF2M-50/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        console.log(msg || "Order received!");
+        form.reset();
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html";
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+      });
+    });
+  </script>
 </body>
 </html>
