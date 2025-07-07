@@ -2,9 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Account Activation – Incpro</title>
+  <title>Account Verification – Incpro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
+      margin: 0;
+      padding: 0;
       font-family: sans-serif;
       background: #f3f3f3;
       display: flex;
@@ -22,6 +25,12 @@
     }
     .box h2 {
       color: #2b6cb0;
+      margin-bottom: 1rem;
+    }
+    .message {
+      font-size: 1rem;
+      margin-top: 1rem;
+      color: #444;
     }
     .success {
       color: green;
@@ -29,45 +38,60 @@
     .error {
       color: red;
     }
-    a {
+    a.button {
+      margin-top: 1.5rem;
       display: inline-block;
-      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #2b6cb0;
       color: white;
-      background: #2b6cb0;
-      padding: 0.75rem 1.25rem;
-      border-radius: 5px;
       text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="box" id="result">
-    <h2>Verifying...</h2>
+    <h2>Verifying your account...</h2>
+    <p class="message">Please wait while we activate your account.</p>
   </div>
 
   <script>
     const resultBox = document.getElementById("result");
-
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get("email");
 
     if (!email) {
-      resultBox.innerHTML = `<p class="error">❌ Invalid link.</p>`;
+      resultBox.innerHTML = `
+        <h2 class="error">❌ Invalid Verification Link</h2>
+        <p class="message">We couldn't find an email to verify.</p>
+      `;
     } else {
-      fetch("https://script.google.com/macros/s/AKfycbxgqY5XG9RZCFQQbkwbUQD4P8eARa31S9coAVUYSRmom-5du3wPD2Dggm9_rpXtn4b1-A/exec" + encodeURIComponent(email))
+      const scriptURL = "https://script.google.com/macros/s/AKfycbzcqCg0f3J5NQVfVTZ_lULFSU7_UH9QKSgfNSf43r2ZzxVUIsQEAPY0QYierZtf4vpWvw/exec";
+      const verifyURL = scriptURL + "?verify=true&email=" + encodeURIComponent(email);
+
+      fetch(verifyURL)
         .then(res => res.text())
-        .then(msg => {
-          if (msg.includes("✅")) {
+        .then(response => {
+          if (response.includes("✅")) {
             resultBox.innerHTML = `
-              <h2 class="success">${msg}</h2>
-              <a href="login.html">Go to Login</a>`;
+              <h2 class="success">✅ Account Verified</h2>
+              <p class="message">${response}</p>
+              <a href="login.html" class="button">Go to Login</a>
+            `;
           } else {
-            resultBox.innerHTML = `<p class="error">${msg}</p>`;
+            resultBox.innerHTML = `
+              <h2 class="error">❌ Verification Failed</h2>
+              <p class="message">${response}</p>
+            `;
           }
         })
-        .catch(err => {
-          console.error(err);
-          resultBox.innerHTML = `<p class="error">Something went wrong. Please try again later.</p>`;
+        .catch(error => {
+          console.error(error);
+          resultBox.innerHTML = `
+            <h2 class="error">❌ Error Occurred</h2>
+            <p class="message">Something went wrong while verifying your account. Please try again later.</p>
+          `;
         });
     }
   </script>
