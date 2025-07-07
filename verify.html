@@ -67,7 +67,7 @@
         <p class="message">We couldn't find an email to verify.</p>
       `;
     } else {
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxgqY5XG9RZCFQQbkwbUQD4P8eARa31S9coAVUYSRmom-5du3wPD2Dggm9_rpXtn4b1-A/exec";
+      const scriptURL = "https://script.google.com/macros/s/AKfycbycMGDjplUl7qQIWeAiez0fXHHuPqLEDnsqJGu5t_HKTNXBp_9e4vkRqlz6R4RML8se/exec";
       const verifyURL = scriptURL + "?verify=true&email=" + encodeURIComponent(email);
 
       fetch(verifyURL)
