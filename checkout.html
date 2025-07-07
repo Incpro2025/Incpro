@@ -26,7 +26,6 @@
       padding: 2rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h2 { margin-bottom: 1rem; }
     label { display: block; margin-top: 1rem; font-weight: bold; }
     input, select {
       width: 100%;
@@ -46,7 +45,6 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    button:hover { background: #333; }
     .checkout-summary {
       background: #f9fafb;
       padding: 1rem;
@@ -54,21 +52,15 @@
       border-left: 4px solid #2b6cb0;
       border-radius: 6px;
     }
-    .checkout-summary ul {
-      list-style: none;
-      padding-left: 0;
-    }
     .checkout-summary li {
-      margin-bottom: 1rem;
       display: flex;
       align-items: center;
+      margin-bottom: 1rem;
     }
     .checkout-summary img {
       width: 50px;
-      height: auto;
       margin-right: 10px;
       border-radius: 4px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -94,7 +86,7 @@
       <input type="email" id="email" name="email" required />
 
       <label for="phone">Phone Number</label>
-      <input type="tel" id="phone" name="phone" placeholder="e.g. 9876543210" required />
+      <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required />
 
       <label for="address">Shipping Address</label>
       <input type="text" id="address" name="address" required />
@@ -169,7 +161,7 @@
       localStorage.setItem("customerName", form.name.value);
       localStorage.setItem("orderSummary", JSON.stringify(cart));
 
-      fetch("https://script.google.com/macros/s/AKfycbytxyJfZHC1iz6lgXpfU6NYWL0j3XPCvVRSOVpkz6st5Jt9rOfkykMNPLIY8x6nZMSf/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzsT_9TnGMyvJr7HNUr8z37DHuw42qDZamgrk2hEWzUqMpiSO3u0Ax58_wqs1b0oQ3a/exec", {
         method: "POST",
         body: JSON.stringify(data)
       })
