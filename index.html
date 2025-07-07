@@ -5,14 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Incpro - Home</title>
   <link rel="stylesheet" href="style.css" />
+  
+  <!-- Font Awesome CDN for Sign In icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    nav {
+      background-color: #2b6cb0;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 0.75rem;
+      font-weight: 500;
+    }
+    nav .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .signin-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: white;
+      color: #2b6cb0;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .signin-btn:hover {
+      background: #e8f0ff;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #f4f7fc;
+    }
+    .hero {
+      text-align: center;
+      padding: 1rem;
+    }
+    .products {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .product {
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+    }
+    .product img {
+      max-width: 200px;
+      border-radius: 10px;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #f0f4f9;
+      font-size: 0.9rem;
+      color: #666;
+    }
+  </style>
 </head>
 <body>
+
   <nav>
-    <a href="index.html">Home</a>
-    <a href="products.html">Products</a>
-    <a href="cart.html">Cart</a>
-    <a href="contact.html">Contact</a>
-    <a href="signup.html" style="font-weight: bold;">Sign Up</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="signup.html" style="font-weight: bold;">Sign Up</a>
+    </div>
+    <a href="login.html" class="signin-btn">
+      <i class="fas fa-sign-in-alt"></i> Sign In
+    </a>
   </nav>
 
   <header>
@@ -29,12 +107,10 @@
       <img src="https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4" alt="Cars" />
       <h3>Cars</h3>
     </a>
-
     <a href="products.html" class="product">
       <img src="https://drive.google.com/thumbnail?id=1KElu4RGRDbarA7_9OeUCOfff1yvC_nCD" alt="Trains" />
       <h3>Trains</h3>
     </a>
-
     <a href="products.html" class="product">
       <img src="https://drive.google.com/thumbnail?id=1-HHco3t_hKGtzwIxvN9kALeiGb03W07n" alt="ToyGuns" />
       <h3>ToyGuns</h3>
@@ -44,5 +120,6 @@
   <footer>
     <p>&copy; 2025 Incpro. All rights reserved.</p>
   </footer>
+
 </body>
 </html>
