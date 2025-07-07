@@ -35,11 +35,6 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
-    input[readonly] {
-      background-color: #f5f5f5;
-      font-weight: bold;
-      color: #444;
-    }
     button {
       margin-top: 2rem;
       width: 100%;
@@ -93,13 +88,13 @@
     <h2>Billing Details</h2>
     <form id="checkoutForm">
       <label for="name">Full Name</label>
-      <input type="text" id="name" name="name" placeholder="Your name" required />
+      <input type="text" id="name" name="name" required />
 
       <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="you@example.com" required />
+      <input type="email" id="email" name="email" required />
 
       <label for="address">Shipping Address</label>
-      <input type="text" id="address" name="address" placeholder="123 Street, City, Country" required />
+      <input type="text" id="address" name="address" required />
 
       <label for="payment">Payment Method</label>
       <select id="payment" name="payment" required>
@@ -121,55 +116,38 @@
   </footer>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const singleProduct = params.get("product");
-    const singlePrice = params.get("price");
-
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const cartSummary = document.getElementById("cart-summary");
     const productInput = document.getElementById("product");
     const priceInput = document.getElementById("price");
 
     let total = 0;
-    let summaryHTML = "";
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let names = [];
+    let list = "";
 
-    if (singleProduct && singlePrice && cart.length === 0) {
-      summaryHTML = `
-        <ul>
-          <li>${singleProduct} – ₹${singlePrice}</li>
-        </ul>
-        <p><strong>Total:</strong> ₹${singlePrice}</p>
-      `;
-      productInput.value = singleProduct;
-      priceInput.value = singlePrice;
-    } else if (cart.length > 0) {
-      let list = "";
-      let names = [];
+    if (cart.length > 0) {
       cart.forEach(item => {
         const image = item.image || "images/placeholder.png";
         list += `
           <li>
             <img src="${image}" alt="${item.name}" onerror="this.src='images/placeholder.png'" />
             ${item.name} – ₹${item.price}
-          </li>
-        `;
+          </li>`;
         total += Number(item.price);
         names.push(item.name);
       });
-      summaryHTML = `
+
+      cartSummary.innerHTML = `
+        <h3>🛍️ Order Summary</h3>
         <ul>${list}</ul>
         <p><strong>Total:</strong> ₹${total}</p>
       `;
+
       productInput.value = names.join(", ");
       priceInput.value = total;
     } else {
-      summaryHTML = `<p>Your cart is empty.</p>`;
+      cartSummary.innerHTML = `<p>Your cart is empty.</p>`;
     }
-
-    cartSummary.innerHTML = `
-      <h3>🧾 Order Summary</h3>
-      ${summaryHTML}
-    `;
 
     document.getElementById("checkoutForm").addEventListener("submit", function(e) {
       e.preventDefault();
@@ -185,7 +163,7 @@
       };
 
       localStorage.setItem("customerName", form.name.value);
-      localStorage.setItem("orderSummary", JSON.stringify(cart)); // ✅ Save for thankyou.html
+      localStorage.setItem("orderSummary", JSON.stringify(cart));
 
       fetch("https://script.google.com/macros/s/AKfycbzh2vyxuEx-32iPb3_GkZ69Mq-0Q8cD2ul9sD96o62mNDrR1jRe8w7GC8a6jqVnIZAB/exec", {
         method: "POST",
