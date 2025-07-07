@@ -169,7 +169,7 @@
       localStorage.setItem("customerName", form.name.value);
       localStorage.setItem("orderSummary", JSON.stringify(cart));
 
-      fetch("https://script.google.com/macros/s/AKfycbzh2vyxuEx-32iPb3_GkZ69Mq-0Q8cD2ul9sD96o62mNDrR1jRe8w7GC8a6jqVnIZAB/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbytxyJfZHC1iz6lgXpfU6NYWL0j3XPCvVRSOVpkz6st5Jt9rOfkykMNPLIY8x6nZMSf/exec", {
         method: "POST",
         body: JSON.stringify(data)
       })
