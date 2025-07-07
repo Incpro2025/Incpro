@@ -54,7 +54,7 @@
     if (!email) {
       resultBox.innerHTML = `<p class="error">❌ Invalid link.</p>`;
     } else {
-      fetch("https://script.google.com/macros/s/AKfycbzcqCg0f3J5NQVfVTZ_lULFSU7_UH9QKSgfNSf43r2ZzxVUIsQEAPY0QYierZtf4vpWvw/exec" + encodeURIComponent(email))
+      fetch("https://script.google.com/macros/s/AKfycbxgqY5XG9RZCFQQbkwbUQD4P8eARa31S9coAVUYSRmom-5du3wPD2Dggm9_rpXtn4b1-A/exec" + encodeURIComponent(email))
         .then(res => res.text())
         .then(msg => {
           if (msg.includes("✅")) {
