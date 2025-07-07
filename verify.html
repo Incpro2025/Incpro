@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Account Activation – Incpro</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .box {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      max-width: 400px;
+    }
+    .box h2 {
+      color: #2b6cb0;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+    a {
+      display: inline-block;
+      margin-top: 1rem;
+      color: white;
+      background: #2b6cb0;
+      padding: 0.75rem 1.25rem;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="box" id="result">
+    <h2>Verifying...</h2>
+  </div>
+
+  <script>
+    const resultBox = document.getElementById("result");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get("email");
+
+    if (!email) {
+      resultBox.innerHTML = `<p class="error">❌ Invalid link.</p>`;
+    } else {
+      fetch("https://script.google.com/macros/s/AKfycbzcqCg0f3J5NQVfVTZ_lULFSU7_UH9QKSgfNSf43r2ZzxVUIsQEAPY0QYierZtf4vpWvw/exec" + encodeURIComponent(email))
+        .then(res => res.text())
+        .then(msg => {
+          if (msg.includes("✅")) {
+            resultBox.innerHTML = `
+              <h2 class="success">${msg}</h2>
+              <a href="login.html">Go to Login</a>`;
+          } else {
+            resultBox.innerHTML = `<p class="error">${msg}</p>`;
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          resultBox.innerHTML = `<p class="error">Something went wrong. Please try again later.</p>`;
+        });
+    }
+  </script>
+</body>
+</html>
