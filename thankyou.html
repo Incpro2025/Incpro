@@ -20,7 +20,6 @@
       padding: 2rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1 { color: #2b6cb0; }
     .order-summary {
       margin-top: 2rem;
       background: #f9fafb;
@@ -49,6 +48,18 @@
       text-align: right;
       margin-top: 1rem;
     }
+    .invoice-btn {
+      margin-top: 2rem;
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: #2b6cb0;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .invoice-btn:hover {
+      background: #1a4e8a;
+    }
   </style>
 </head>
 <body>
@@ -58,8 +69,11 @@
 
   <div class="thankyou-container">
     <p>Hi <strong id="customer-name">Customer</strong>, your order has been successfully placed!</p>
+    <p>Your Order ID is <strong id="order-id">#Loading...</strong></p>
 
     <div class="order-summary" id="order-summary"></div>
+
+    <a href="#" class="invoice-btn" onclick="window.print()">🧾 Download Invoice</a>
 
     <p style="margin-top: 2rem;">We’ll send you a confirmation email shortly. Your items will be shipped soon 🚚</p>
   </div>
@@ -93,7 +107,14 @@
       summary.innerHTML = list;
     }
 
-    // Clean up after displaying
+    // Optional: Fetch Order ID from Apps Script response (if stored)
+    // For now, simulate with timestamp-based ID
+    const now = new Date();
+    const pad = n => n.toString().padStart(2, "0");
+    const orderId = `INC-${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+    document.getElementById("order-id").textContent = orderId;
+
+    // Clean up
     localStorage.removeItem("orderSummary");
   </script>
 </body>
