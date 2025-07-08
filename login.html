@@ -20,11 +20,11 @@
     </ul>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero Header -->
   <section class="hero-banner">
     <div class="hero-content">
       <h2>Welcome Back</h2>
-      <p>Sign in to continue exploring amazing products</p>
+      <p>Log in securely to manage your orders</p>
     </div>
   </section>
 
@@ -35,7 +35,7 @@
     </svg>
   </div>
 
-  <!-- Login Form -->
+  <!-- Login Form Section -->
   <section class="checkout-container">
     <form id="loginForm">
       <label for="email">Email</label>
@@ -51,24 +51,25 @@
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 Incpro. Secure access, stylish login.</p>
+    <p>&copy; 2025 Incpro. Safe. Stylish. Seamless.</p>
   </footer>
 
-  <!-- JavaScript -->
+  <!-- Script -->
   <script>
-    // Mobile Nav Toggle
     const toggle = document.getElementById("navToggle");
     const links = document.getElementById("navLinks");
     toggle?.addEventListener("click", () => {
       links.classList.toggle("active");
     });
 
-    // Login Logic
     const form = document.getElementById("loginForm");
     const statusMsg = document.getElementById("statusMsg");
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      statusMsg.textContent = "Authenticating...";
+      statusMsg.style.color = "#444";
+
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
@@ -78,10 +79,13 @@
         return;
       }
 
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxMuFqTEiK_R1o3jJ65_2ufdZqIzGusjbD4xCGzxKYiPyzyJwUIwo046qDmax5z9bd5Ww/exec"; // 🔁 Replace with your script URL
+      const scriptURL = "https://script.google.com/macros/s/AKfycbxMuFqTEiK_R1o3jJ65_2ufdZqIzGusjbD4xCGzxKYiPyzyJwUIwo046qDmax5z9bd5Ww/exec";
 
       fetch(scriptURL, {
         method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
         body: JSON.stringify({
           action: "login",
           email: email,
@@ -91,7 +95,7 @@
       .then(res => res.text())
       .then(msg => {
         if (msg.includes("✅")) {
-          statusMsg.textContent = "✅ Login successful! Redirecting...";
+          statusMsg.textContent = msg;
           statusMsg.style.color = "green";
           setTimeout(() => {
             window.location.href = "index.html";
