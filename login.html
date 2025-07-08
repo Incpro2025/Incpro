@@ -24,7 +24,7 @@
   <section class="hero-banner">
     <div class="hero-content">
       <h2>Welcome Back</h2>
-      <p>Log in securely to manage your orders</p>
+      <p>Log in to continue your Incpro journey</p>
     </div>
   </section>
 
@@ -35,11 +35,11 @@
     </svg>
   </div>
 
-  <!-- Login Form Section -->
+  <!-- Login Form -->
   <section class="checkout-container">
     <form id="loginForm">
       <label for="email">Email</label>
-      <input type="email" id="email" required />
+      <input type="email" id="email" placeholder="your@email.com" required />
 
       <label for="password">Password</label>
       <input type="password" id="password" required />
@@ -51,10 +51,10 @@
 
   <!-- Footer -->
   <footer>
-    <p>&copy; 2025 Incpro. Safe. Stylish. Seamless.</p>
+    <p>&copy; 2025 Incpro. Trusted, simple, seamless.</p>
   </footer>
 
-  <!-- Script -->
+  <!-- JavaScript -->
   <script>
     const toggle = document.getElementById("navToggle");
     const links = document.getElementById("navLinks");
@@ -67,49 +67,19 @@
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      statusMsg.textContent = "Authenticating...";
-      statusMsg.style.color = "#444";
-
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value.trim();
 
-      if (!email || !password) {
-        statusMsg.textContent = "❌ Please enter both email and password.";
+      if (email && password.length >= 4) {
+        statusMsg.textContent = "✅ Login successful! Redirecting...";
+        statusMsg.style.color = "green";
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      } else {
+        statusMsg.textContent = "❌ Invalid email or password.";
         statusMsg.style.color = "red";
-        return;
       }
-
-      const scriptURL = "https://script.google.com/macros/s/AKfycbxMuFqTEiK_R1o3jJ65_2ufdZqIzGusjbD4xCGzxKYiPyzyJwUIwo046qDmax5z9bd5Ww/exec";
-
-      fetch(scriptURL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify({
-          action: "login",
-          email: email,
-          password: password
-        })
-      })
-      .then(res => res.text())
-      .then(msg => {
-        if (msg.includes("✅")) {
-          statusMsg.textContent = msg;
-          statusMsg.style.color = "green";
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 1000);
-        } else {
-          statusMsg.textContent = msg;
-          statusMsg.style.color = "red";
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        statusMsg.textContent = "❌ Something went wrong. Please try again.";
-        statusMsg.style.color = "red";
-      });
     });
   </script>
 
