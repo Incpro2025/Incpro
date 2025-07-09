@@ -4,119 +4,31 @@
   <meta charset="UTF-8" />
   <title>Admin Panel – Incpro</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
   <style>
-    body {
-      font-family: sans-serif;
-      background: #fdf6f9;
-      margin: 0;
-      padding: 0;
-    }
-    nav, footer {
-      background: #c2185b;
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    .nav-links li {
-      display: inline-block;
-      margin: 0 1rem;
-    }
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .hero-banner {
-      text-align: center;
-      padding: 2rem;
-      background: #fce4ec;
-    }
-    .wave-divider svg {
-      display: block;
-      margin: 0;
-    }
-    .admin-container {
-      max-width: 700px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-    }
-    .admin-container label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    .admin-container input {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .admin-container button {
-      margin-top: 1rem;
-      width: 100%;
-      padding: 1rem;
-      background: #c2185b;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-    .admin-container button:hover {
-      background: #ad1457;
-    }
-    #msg {
-      margin-top: 1rem;
-      font-weight: bold;
-      text-align: center;
-    }
-    table {
-      margin-top: 2rem;
-      width: 100%;
-      border-collapse: collapse;
-    }
-    table th, table td {
-      padding: 0.75rem;
-      border: 1px solid #ccc;
-      text-align: left;
-    }
-    .actions button {
-      margin-right: 0.5rem;
-      background: #eee;
-      border: none;
-      padding: 0.4rem 0.7rem;
-      cursor: pointer;
-      border-radius: 3px;
-    }
-    #authScreen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    #authScreen input {
-      padding: 0.7rem;
-      font-size: 1rem;
-      margin-top: 1rem;
-    }
-    #authScreen button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.5rem;
-      background: #c2185b;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
+    body { font-family: sans-serif; background: #fdf6f9; margin: 0; padding: 0; }
+    nav, footer { background: #c2185b; color: white; padding: 1rem; text-align: center; }
+    .nav-links { list-style: none; margin: 0; padding: 0; }
+    .nav-links li { display: inline-block; margin: 0 1rem; }
+    .nav-links a { color: white; text-decoration: none; font-weight: bold; }
+    .hero-banner { text-align: center; padding: 2rem; background: #fce4ec; }
+    .wave-divider svg { display: block; margin: 0; }
+    .admin-container { max-width: 700px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05); }
+    .admin-container label { display: block; margin-top: 1rem; font-weight: bold; }
+    .admin-container input { width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
+    .admin-container button { margin-top: 1rem; width: 100%; padding: 1rem; background: #c2185b; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
+    .admin-container button:hover { background: #ad1457; }
+    #msg { margin-top: 1rem; font-weight: bold; text-align: center; }
+    table { margin-top: 2rem; width: 100%; border-collapse: collapse; }
+    table th, table td { padding: 0.75rem; border: 1px solid #ccc; text-align: left; }
+    .actions button { margin-right: 0.5rem; background: #eee; border: none; padding: 0.4rem 0.7rem; cursor: pointer; border-radius: 3px; }
+    #authScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+    #authScreen input { padding: 0.7rem; font-size: 1rem; margin-top: 1rem; width: 250px; }
+    #authScreen button { margin-top: 1rem; padding: 0.6rem 1.5rem; background: #c2185b; color: white; border: none; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
 
+  <!-- Admin Login Screen -->
   <div id="authScreen">
     <h2>🔐 Admin Access</h2>
     <input type="password" id="adminKey" placeholder="Enter Admin PIN" />
@@ -124,8 +36,9 @@
     <p id="authError" style="color:red;"></p>
   </div>
 
+  <!-- Admin Panel -->
   <div id="adminPanel" style="display:none;">
-    <nav class="main-nav">
+    <nav>
       <div class="brand">Incpro</div>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
@@ -135,127 +48,105 @@
     </nav>
 
     <section class="hero-banner">
-      <div class="hero-content">
-        <h2>📦 Admin – Manage Products</h2>
-        <p>Add, update or delete products below</p>
-      </div>
+      <h2>📦 Admin – Manage Products</h2>
+      <p>Add, update, or delete products below</p>
     </section>
 
     <div class="wave-divider">
-      <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
-        <path d="M0,60 C480,150 960,-30 1440,60 L1440,150 L0,150 Z" fill="#ffffff"></path>
-      </svg>
+      <svg viewBox="0 0 1440 150"><path d="M0,60 C480,150 960,-30 1440,60 L1440,150 L0,150 Z" fill="#fff"/></svg>
     </div>
 
     <section class="admin-container">
       <form id="adminForm">
-        <label for="name">Product Name</label>
-        <input type="text" id="name" required />
-        <label for="price">Price (₹)</label>
-        <input type="number" id="price" required />
-        <label for="quantity">Quantity</label>
-        <input type="number" id="quantity" required />
-        <label for="image">Image URL</label>
-        <input type="text" id="image" placeholder="https://...jpg" required />
-        <input type="hidden" id="editIndex" />
+        <label>Product Name</label><input type="text" id="name" required/>
+        <label>Price (₹)</label><input type="number" id="price" required/>
+        <label>Quantity</label><input type="number" id="quantity" required/>
+        <label>Image URL</label><input type="text" id="image" required/>
+        <input type="hidden" id="editIndex"/>
         <button type="submit">Save Product</button>
         <p id="msg"></p>
       </form>
 
       <table id="productTable">
-        <thead>
-          <tr><th>Name</th><th>Price</th><th>Qty</th><th>Image</th><th>Actions</th></tr>
-        </thead>
+        <thead><tr><th>Name</th><th>Price</th><th>Qty</th><th>Image</th><th>Actions</th></tr></thead>
         <tbody></tbody>
       </table>
     </section>
 
-    <footer>
-      <p>&copy; 2025 Incpro. Admin access only.</p>
-    </footer>
+    <footer>&copy; 2025 Incpro. Admin only.</footer>
   </div>
 
   <script>
-    const secretCode = "incadmin2025";
+    const secretCode="incadmin2025";
+    const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec";
 
-    // Check access on load
-    if (localStorage.getItem("incproAdmin") === "true") {
-      document.getElementById("authScreen").style.display = "none";
-      document.getElementById("adminPanel").style.display = "block";
+    // Auth
+    document.getElementById("loginBtn").onclick=()=>{
+      const key=document.getElementById("adminKey").value.trim();
+      if(key===secretCode){ localStorage.setItem("incproAdmin","true"); showPanel(); }
+      else document.getElementById("authError").textContent="❌ Incorrect PIN";
+    };
+    if(localStorage.getItem("incproAdmin")==="true") showPanel();
+    function showPanel(){
+      document.getElementById("authScreen").style.display="none";
+      document.getElementById("adminPanel").style.display="block";
       loadProducts();
     }
+    function logout(){ localStorage.removeItem("incproAdmin"); location.reload(); }
 
-    document.getElementById("loginBtn").addEventListener("click", function () {
-      const input = document.getElementById("adminKey").value.trim();
-      if (input === secretCode) {
-        localStorage.setItem("incproAdmin", "true");
-        location.reload();
-      } else {
-        document.getElementById("authError").textContent = "❌ Incorrect PIN";
-      }
-    });
-
-    function logout() {
-      localStorage.removeItem("incproAdmin");
-      location.reload();
-    }
-
-    const form = document.getElementById("adminForm");
-    const msg = document.getElementById("msg");
-    const tableBody = document.querySelector("#productTable tbody");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const name = form.name.value.trim();
-      const price = form.price.value.trim();
-      const quantity = form.quantity.value.trim();
-      const image = form.image.value.trim();
-      const index = form.editIndex.value;
-
-      let products = JSON.parse(localStorage.getItem("allProducts")) || [];
-
-      if (index) {
-        products[index] = { name, price, quantity, image };
-        msg.textContent = "✅ Product updated!";
-      } else {
-        products.push({ name, price, quantity, image });
-        msg.textContent = "✅ Product saved!";
-      }
-
-      msg.style.color = "green";
-      localStorage.setItem("allProducts", JSON.stringify(products));
-      form.reset();
-      form.editIndex.value = "";
-      loadProducts();
-    });
-
-    function loadProducts() {
-      const products = JSON.parse(localStorage.getItem("allProducts")) || [];
-      tableBody.innerHTML = "";
-      products.forEach((p, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${p.name}</td>
-          <td>₹${p.price}</td>
-          <td>${p.quantity}</td>
-          <td><img src="${p.image}" width="50" height="50" onerror="this.src='images/placeholder.png'" /></td>
-          <td class="actions">
-            <button onclick="editProduct(${index})">Edit</button>
-            <button onclick="deleteProduct(${index})">Delete</button>
-          </td>
-        `;
-        tableBody.appendChild(row);
+    // CRUD via Google Sheets
+    function loadProducts(){
+      fetch(SCRIPT_URL).then(r=>r.json()).then(data=>{
+        const tbody=document.querySelector("#productTable tbody");
+        tbody.innerHTML="";
+        data.forEach(p=>{
+          const tr=document.createElement("tr");
+          tr.innerHTML=`
+            <td>${p.name}</td><td>₹${p.price}</td><td>${p.quantity}</td>
+            <td><img src="${p.image}" width="50" onerror="this.src='images/placeholder.png'" /></td>
+            <td class="actions">
+              <button onclick="editProduct(${p.row})">Edit</button>
+              <button onclick="deleteProduct(${p.row})">Delete</button>
+            </td>`;
+          tbody.appendChild(tr);
+        });
       });
     }
 
-    function editProduct(index) {
-      const products = JSON.parse(localStorage.getItem("allProducts")) || [];
-      const p = products[index];
-      form.name.value = p.name;
-      form.price.value = p.price;
-      form.quantity.value = p.quantity;
-      form.image.value = p.image;
-      form.editIndex.value = index;
-      msg.textContent = "Editing product…";
-      msg.style.color = "#c2185b";
+    document.getElementById("adminForm").onsubmit=e=>{
+      e.preventDefault();
+      const f=e.target;
+      const payload={ name:f.name.value.trim(), price:f.price.value.trim(), quantity:f.quantity.value.trim(), image:f.image.value.trim() };
+      const row=f.editIndex.value;
+      const method=row?"PUT":"POST";
+      if(row) payload.row=row;
+
+      fetch(SCRIPT_URL,{
+        method, headers:{"Content-Type":"text/plain"}, body:JSON.stringify(payload)
+      }).then(r=>r.text()).then(msg=>{
+        document.getElementById("msg").textContent=msg;
+        f.reset(); f.editIndex.value=""; loadProducts();
+      });
+    };
+
+    function editProduct(row){
+      fetch(SCRIPT_URL).then(r=>r.json()).then(data=>{
+        const p=data.find(x=>x.row===row);
+        const f=document.getElementById("adminForm");
+        f.name.value=p.name; f.price.value=p.price;
+        f.quantity.value=p.quantity; f.image.value=p.image;
+        f.editIndex.value=row;
+      });
+    }
+
+    function deleteProduct(row){
+      if(!confirm("Delete?")) return;
+      fetch(`${SCRIPT_URL}?row=${row}`,{method:"DELETE"})
+        .then(r=>r.text()).then(msg=>{
+          document.getElementById("msg").textContent=msg;
+          loadProducts();
+        });
+    }
+  </script>
+</body>
+</html>
