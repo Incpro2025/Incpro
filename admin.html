@@ -2,151 +2,113 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Panel – Incpro</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Incpro Admin Panel</title>
   <style>
-    body { font-family: sans-serif; background: #fdf6f9; margin: 0; padding: 0; }
-    nav, footer { background: #c2185b; color: white; padding: 1rem; text-align: center; }
-    .nav-links { list-style: none; margin: 0; padding: 0; }
-    .nav-links li { display: inline-block; margin: 0 1rem; }
-    .nav-links a { color: white; text-decoration: none; font-weight: bold; }
-    .hero-banner { text-align: center; padding: 2rem; background: #fce4ec; }
-    .wave-divider svg { display: block; margin: 0; }
-    .admin-container { max-width: 700px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05); }
-    .admin-container label { display: block; margin-top: 1rem; font-weight: bold; }
-    .admin-container input { width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-    .admin-container button { margin-top: 1rem; width: 100%; padding: 1rem; background: #c2185b; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
-    .admin-container button:hover { background: #ad1457; }
-    #msg { margin-top: 1rem; font-weight: bold; text-align: center; }
-    table { margin-top: 2rem; width: 100%; border-collapse: collapse; }
-    table th, table td { padding: 0.75rem; border: 1px solid #ccc; text-align: left; }
-    .actions button { margin-right: 0.5rem; background: #eee; border: none; padding: 0.4rem 0.7rem; cursor: pointer; border-radius: 3px; }
-    #authScreen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-    #authScreen input { padding: 0.7rem; font-size: 1rem; margin-top: 1rem; width: 250px; }
-    #authScreen button { margin-top: 1rem; padding: 0.6rem 1.5rem; background: #c2185b; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    body {
+      font-family: sans-serif;
+      background: #fdfdfd;
+      padding: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #c2185b;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    form {
+      background: #f9f9f9;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #c2185b;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Admin Login Screen -->
-  <div id="authScreen">
-    <h2>🔐 Admin Access</h2>
-    <input type="password" id="adminKey" placeholder="Enter Admin PIN" />
-    <button id="loginBtn">Login</button>
-    <p id="authError" style="color:red;"></p>
-  </div>
+  <h1>🛠️ Add a Product</h1>
 
-  <!-- Admin Panel -->
-  <div id="adminPanel" style="display:none;">
-    <nav>
-      <div class="brand">Incpro</div>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="products.html">Products</a></li>
-        <li><a href="#" onclick="logout()">Logout</a></li>
-      </ul>
-    </nav>
+  <form id="adminForm">
+    <label>Name:</label>
+    <input type="text" name="name" required>
 
-    <section class="hero-banner">
-      <h2>📦 Admin – Manage Products</h2>
-      <p>Add, update, or delete products below</p>
-    </section>
+    <label>Price (₹):</label>
+    <input type="number" name="price" required>
 
-    <div class="wave-divider">
-      <svg viewBox="0 0 1440 150"><path d="M0,60 C480,150 960,-30 1440,60 L1440,150 L0,150 Z" fill="#fff"/></svg>
-    </div>
+    <label>Quantity:</label>
+    <input type="number" name="quantity" required>
 
-    <section class="admin-container">
-      <form id="adminForm">
-        <label>Product Name</label><input type="text" id="name" required/>
-        <label>Price (₹)</label><input type="number" id="price" required/>
-        <label>Quantity</label><input type="number" id="quantity" required/>
-        <label>Image URL</label><input type="text" id="image" required/>
-        <input type="hidden" id="editIndex"/>
-        <button type="submit">Save Product</button>
-        <p id="msg"></p>
-      </form>
+    <label>Image URL:</label>
+    <input type="text" name="image" required>
 
-      <table id="productTable">
-        <thead><tr><th>Name</th><th>Price</th><th>Qty</th><th>Image</th><th>Actions</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </section>
-
-    <footer>&copy; 2025 Incpro. Admin only.</footer>
-  </div>
+    <button type="submit">Add Product</button>
+    <div class="message" id="messageBox"></div>
+  </form>
 
   <script>
-    const secretCode="incadmin2025";
-    const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec";
+    const RAW_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYRO7q3OFDepW-BeubuVlg-Q2BJ4esMjjFnEC_khBfqonJGMfBCaWwpwsYmVxcfHVK/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYRO7q3OFDepW-BeubuVlg-Q2BJ4esMjjFnEC_khBfqonJGMfBCaWwpwsYmVxcfHVK/exec" + encodeURIComponent(RAW_SCRIPT_URL);
 
-    // Auth
-    document.getElementById("loginBtn").onclick=()=>{
-      const key=document.getElementById("adminKey").value.trim();
-      if(key===secretCode){ localStorage.setItem("incproAdmin","true"); showPanel(); }
-      else document.getElementById("authError").textContent="❌ Incorrect PIN";
-    };
-    if(localStorage.getItem("incproAdmin")==="true") showPanel();
-    function showPanel(){
-      document.getElementById("authScreen").style.display="none";
-      document.getElementById("adminPanel").style.display="block";
-      loadProducts();
-    }
-    function logout(){ localStorage.removeItem("incproAdmin"); location.reload(); }
+    const form = document.getElementById("adminForm");
+    const messageBox = document.getElementById("messageBox");
 
-    // CRUD via Google Sheets
-    function loadProducts(){
-      fetch(SCRIPT_URL).then(r=>r.json()).then(data=>{
-        const tbody=document.querySelector("#productTable tbody");
-        tbody.innerHTML="";
-        data.forEach(p=>{
-          const tr=document.createElement("tr");
-          tr.innerHTML=`
-            <td>${p.name}</td><td>₹${p.price}</td><td>${p.quantity}</td>
-            <td><img src="${p.image}" width="50" onerror="this.src='images/placeholder.png'" /></td>
-            <td class="actions">
-              <button onclick="editProduct(${p.row})">Edit</button>
-              <button onclick="deleteProduct(${p.row})">Delete</button>
-            </td>`;
-          tbody.appendChild(tr);
-        });
-      });
-    }
-
-    document.getElementById("adminForm").onsubmit=e=>{
+    form.onsubmit = (e) => {
       e.preventDefault();
-      const f=e.target;
-      const payload={ name:f.name.value.trim(), price:f.price.value.trim(), quantity:f.quantity.value.trim(), image:f.image.value.trim() };
-      const row=f.editIndex.value;
-      const method=row?"PUT":"POST";
-      if(row) payload.row=row;
+      messageBox.textContent = "⏳ Adding product...";
 
-      fetch(SCRIPT_URL,{
-        method, headers:{"Content-Type":"text/plain"}, body:JSON.stringify(payload)
-      }).then(r=>r.text()).then(msg=>{
-        document.getElementById("msg").textContent=msg;
-        f.reset(); f.editIndex.value=""; loadProducts();
+      const data = new FormData(form);
+      const payload = {
+        name: data.get("name"),
+        price: data.get("price"),
+        quantity: data.get("quantity"),
+        image: data.get("image")
+      };
+
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.text())
+      .then(result => {
+        messageBox.textContent = result.includes("✅")
+          ? "✅ Product added successfully!"
+          : result;
+        form.reset();
+      })
+      .catch(err => {
+        console.error("❌ Error:", err);
+        messageBox.textContent = "❌ Failed to add product. Please try again.";
       });
     };
-
-    function editProduct(row){
-      fetch(SCRIPT_URL).then(r=>r.json()).then(data=>{
-        const p=data.find(x=>x.row===row);
-        const f=document.getElementById("adminForm");
-        f.name.value=p.name; f.price.value=p.price;
-        f.quantity.value=p.quantity; f.image.value=p.image;
-        f.editIndex.value=row;
-      });
-    }
-
-    function deleteProduct(row){
-      if(!confirm("Delete?")) return;
-      fetch(`${SCRIPT_URL}?row=${row}`,{method:"DELETE"})
-        .then(r=>r.text()).then(msg=>{
-          document.getElementById("msg").textContent=msg;
-          loadProducts();
-        });
-    }
   </script>
+
 </body>
 </html>

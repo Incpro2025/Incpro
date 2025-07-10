@@ -32,7 +32,7 @@
     }
     .product-card h3 { margin: 1rem 0 0.5rem; }
     .product-card p { margin: 0.25rem 0; }
-    .product-card a.buy-link {
+    .buy-link {
       display: inline-block;
       margin-top: 0.5rem;
       padding: 0.5rem 1rem;
@@ -64,13 +64,16 @@
   </footer>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec"; // Replace this
+    const RAW_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec";
+    const SCRIPT_URL = "https://corsproxy.io/?" + encodeURIComponent(RAW_SCRIPT_URL);
 
-    fetch(SCRIPT_URL)
+    fetch("https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec")
       .then(res => res.json())
       .then(products => {
+        console.log("✅ Products loaded:", products);
         const grid = document.getElementById("productGrid");
-        if (!products.length) {
+
+        if (!Array.isArray(products) || products.length === 0) {
           grid.innerHTML = "<p>No products available at the moment.</p>";
           return;
         }
@@ -88,8 +91,8 @@
         `).join("");
       })
       .catch(err => {
-        console.error("Failed to load products:", err);
-        document.getElementById("productGrid").innerHTML = "<p>❌ Error loading products.</p>";
+        console.error("❌ Failed to load products:", err);
+        document.getElementById("productGrid").innerHTML = "<p>⚠️ Could not load products. Please try again later.</p>";
       });
   </script>
 
