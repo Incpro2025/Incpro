@@ -2,110 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Incpro Admin Panel</title>
+  <title>Admin Panel — Toy Catalog</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #fdfdfd;
-      padding: 2rem;
+      font-family: Arial, sans-serif;
+      margin: 40px;
       max-width: 600px;
-      margin: 0 auto;
+      background: #f4f4f4;
     }
-    h1 {
-      color: #c2185b;
-      text-align: center;
-      margin-bottom: 2rem;
+    h2 {
+      color: #333;
     }
     form {
-      background: #f9f9f9;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+      background: #fff;
+      padding: 20px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-    input[type="text"], input[type="number"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.25rem;
-      border-radius: 4px;
-      border: 1px solid #ccc;
+    input, textarea, button {
+      padding: 10px;
+      font-size: 14px;
     }
     button {
-      margin-top: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      background: #c2185b;
+      background-color: #007bff;
       color: white;
       border: none;
-      border-radius: 4px;
-      font-weight: bold;
       cursor: pointer;
     }
-    .message {
-      margin-top: 1rem;
-      text-align: center;
+    button:hover {
+      background-color: #0056b3;
+    }
+    #responseMsg {
+      margin-top: 20px;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <h1>🛠️ Add a Product</h1>
+  <h2>🧸 Admin Panel — Add or Update Product</h2>
 
-  <form id="adminForm">
-    <label>Name:</label>
-    <input type="text" name="name" required>
-
-    <label>Price (₹):</label>
-    <input type="number" name="price" required>
-
-    <label>Quantity:</label>
-    <input type="number" name="quantity" required>
-
-    <label>Image URL:</label>
-    <input type="text" name="image" required>
-
-    <button type="submit">Add Product</button>
-    <div class="message" id="messageBox"></div>
+  <form id="productForm">
+    <input type="text" name="name" placeholder="Product Name" required />
+    <input type="number" name="price" placeholder="Price (₹)" required />
+    <textarea name="description" placeholder="Description" rows="3" required></textarea>
+    <textarea name="keypoints" placeholder="Key Features" rows="3" required></textarea>
+    <input type="number" name="quantity" placeholder="Quantity in stock" required />
+    <button type="submit">📦 Save Product</button>
   </form>
 
+  <p id="responseMsg"></p>
+
   <script>
-    const RAW_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYRO7q3OFDepW-BeubuVlg-Q2BJ4esMjjFnEC_khBfqonJGMfBCaWwpwsYmVxcfHVK/exec";
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYRO7q3OFDepW-BeubuVlg-Q2BJ4esMjjFnEC_khBfqonJGMfBCaWwpwsYmVxcfHVK/exec" + encodeURIComponent(RAW_SCRIPT_URL);
-
-    const form = document.getElementById("adminForm");
-    const messageBox = document.getElementById("messageBox");
-
-    form.onsubmit = (e) => {
+    document.getElementById("productForm").onsubmit = function (e) {
       e.preventDefault();
-      messageBox.textContent = "⏳ Adding product...";
 
-      const data = new FormData(form);
-      const payload = {
-        name: data.get("name"),
-        price: data.get("price"),
-        quantity: data.get("quantity"),
-        image: data.get("image")
+      const fd = new FormData(e.target);
+      const product = {
+        name: fd.get("name"),
+        price: parseFloat(fd.get("price")),
+        description: fd.get("description"),
+        keypoints: fd.get("keypoints"),
+        quantity: parseInt(fd.get("quantity"))
       };
 
-      fetch(SCRIPT_URL, {
+      fetch("https://script.google.com/macros/s/AKfycbwAkBVpV_6UlBlcDl26KokzJlGBl8LM8eyLtF8VABKdz28_ttTG_EHhdlg2KdYN7HZG/exec", {
         method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(payload)
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(product)
       })
       .then(res => res.text())
-      .then(result => {
-        messageBox.textContent = result.includes("✅")
-          ? "✅ Product added successfully!"
-          : result;
-        form.reset();
+      .then(msg => {
+        document.getElementById("responseMsg").textContent = msg;
+        document.getElementById("productForm").reset();
       })
       .catch(err => {
-        console.error("❌ Error:", err);
-        messageBox.textContent = "❌ Failed to add product. Please try again.";
+        document.getElementById("responseMsg").textContent = "❌ " + err.message;
       });
     };
   </script>

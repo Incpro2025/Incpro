@@ -5,46 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Incpro - Products</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body { font-family: sans-serif; background: #f9f9f9; margin: 0; padding: 0; }
-    header { background: #c2185b; color: white; padding: 1rem; text-align: center; }
-    nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: bold; }
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .product-card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      padding: 1rem;
-    }
-    .product-card img {
-      width: 100%;
-      max-height: 160px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-    .product-card h3 { margin: 1rem 0 0.5rem; }
-    .product-card p { margin: 0.25rem 0; }
-    .buy-link {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #c2185b;
-      color: white;
-      border-radius: 4px;
-      text-decoration: none;
-    }
-  </style>
 </head>
 <body>
-
   <header>
     <h1>🛒 Our Products</h1>
     <nav>
@@ -55,46 +17,46 @@
     </nav>
   </header>
 
-  <section class="products-grid" id="productGrid">
-    <!-- Product cards will be injected here -->
-  </section>
+  <section class="products">
+
+  <div class="product">
+    <a href="Products/product1.html">
+      <img src="https://drive.google.com/thumbnail?id=1KElu4RGRDbarA7_9OeUCOfff1yvC_nCD" alt="Train Toy" />
+      <h3>Train Toy</h3>
+      <p>₹799.00</p>
+    </a>
+    <a href="checkout.html?product=Train%20Toy&price=799">
+      <img src="images/buy-now.png" alt="Buy Now" class="buy-now-icon" />
+    </a>
+  </div>
+
+  <div class="product">
+    <a href="Products/product2.html">
+      <img src="https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4" alt="Car Toy" />
+      <h3>Car Toy</h3>
+      <p>₹499.00</p>
+    </a>
+    <a href="checkout.html?product=Car%20Toy&price=499">
+      <img src="images/buy-now.png" alt="Buy Now" class="buy-now-icon" />
+    </a>
+  </div>
+
+  <div class="product">
+    <a href="Products/product3.html">
+      <img src="https://drive.google.com/thumbnail?id=1-HHco3t_hKGtzwIxvN9kALeiGb03W07n" alt="Gun Toy" />
+      <h3>Gun Toy</h3>
+      <p>₹999.00</p>
+       <a href="checkout.html?product=Train%20Toy&price=799">
+    <button>Buy Now</button>
+    </a>
+    <a href="checkout.html?product=Gun%20Toy&price=999">
+    </a>
+  </div>
+
+</section>
 
   <footer>
     <p>&copy; 2025 MyShop. Crafted with ❤️ by Sekar</p>
   </footer>
-
-  <script>
-    const RAW_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec";
-    const SCRIPT_URL = "https://corsproxy.io/?" + encodeURIComponent(RAW_SCRIPT_URL);
-
-    fetch("https://script.google.com/macros/s/AKfycbxBdZjILCdAf5RZYI3Xb-Pyi-S505LwggS1H73BxOK0FUQKX40HsL-4J-xxa7bGMoiZnw/exec")
-      .then(res => res.json())
-      .then(products => {
-        console.log("✅ Products loaded:", products);
-        const grid = document.getElementById("productGrid");
-
-        if (!Array.isArray(products) || products.length === 0) {
-          grid.innerHTML = "<p>No products available at the moment.</p>";
-          return;
-        }
-
-        grid.innerHTML = products.map(p => `
-          <div class="product-card">
-            <img src="${p.image}" alt="${p.name}" onerror="this.src='images/placeholder.png'" />
-            <h3>${p.name}</h3>
-            <p>Price: ₹${p.price}</p>
-            <p>Stock: ${p.quantity}</p>
-            <a class="buy-link" href="checkout.html?product=${encodeURIComponent(p.name)}&price=${p.price}">
-              Buy Now
-            </a>
-          </div>
-        `).join("");
-      })
-      .catch(err => {
-        console.error("❌ Failed to load products:", err);
-        document.getElementById("productGrid").innerHTML = "<p>⚠️ Could not load products. Please try again later.</p>";
-      });
-  </script>
-
 </body>
 </html>
