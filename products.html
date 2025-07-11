@@ -4,37 +4,93 @@
   <meta charset="UTF-8" />
   <title>🧸 Toy Catalog</title>
   <style>
-    body { font-family: sans-serif; padding: 30px; background: #fafafa; }
-    h2 { text-align: center; }
+    body {
+      font-family: sans-serif;
+      padding: 30px;
+      background: #fafafa;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #searchInput, #categoryFilters {
+      max-width: 600px;
+      margin: 0 auto 20px;
+      display: block;
+      text-align: center;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #categoryFilters button {
+      margin: 6px;
+      padding: 8px 14px;
+      border-radius: 4px;
+      border: none;
+      background: #eee;
+      cursor: pointer;
+    }
     .product {
       background: #fff;
       padding: 20px;
-      margin: 20px 0;
+      margin: 20px auto;
+      max-width: 600px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      text-align: center;
     }
-    .product h3 { margin: 0 0 10px; }
-    .product p { margin: 5px 0; }
+    .product img {
+      display: block;
+      max-width: 150px;
+      height: auto;
+      margin: 0 auto 10px;
+      border-radius: 6px;
+    }
+    .product h3 {
+      margin: 10px 0;
+      font-size: 20px;
+      color: #333;
+    }
+    .product p {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
 
   <h2>🧸 Toy Catalog</h2>
+
+  <input type="text" id="searchInput" placeholder="🔍 Search products..." />
+  <div id="categoryFilters"></div>
   <div id="productList">Loading products...</div>
 
   <script>
+    let allProducts = [];
+
     function renderProducts(data) {
+      allProducts = data;
+      renderFilteredProducts(data); // show all initially
+      setupCategoryFilters();
+    }
+
+    function renderFilteredProducts(products) {
       const container = document.getElementById("productList");
       container.innerHTML = "";
 
-      if (!Array.isArray(data) || data.length === 0) {
-        container.textContent = "No products available at the moment.";
+      if (!Array.isArray(products) || products.length === 0) {
+        container.textContent = "No products available.";
         return;
       }
 
-      data.forEach(product => {
+      products.forEach(product => {
         const card = document.createElement("div");
         card.className = "product";
         card.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/150'" />
           <h3>${product.name}</h3>
           <p><strong>Price:</strong> ₹${product.price}</p>
           <p><strong>Description:</strong> ${product.description}</p>
@@ -44,10 +100,45 @@
         container.appendChild(card);
       });
     }
+
+    function setupCategoryFilters() {
+      const container = document.getElementById("categoryFilters");
+      const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+
+      container.innerHTML = "🗂️ <strong>Filter by Category:</strong><br/>";
+
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.onclick = () => {
+          const filtered = allProducts.filter(p => p.category === cat);
+          renderFilteredProducts(filtered);
+        };
+        container.appendChild(btn);
+      });
+
+      const allBtn = document.createElement("button");
+      allBtn.textContent = "Show All";
+      allBtn.onclick = () => renderFilteredProducts(allProducts);
+      container.appendChild(allBtn);
+    }
+
+    document.getElementById("searchInput").addEventListener("input", function(e) {
+      const keyword = e.target.value.toLowerCase();
+      const filtered = allProducts.filter(p =>
+        p.name.toLowerCase().includes(keyword) ||
+        p.description.toLowerCase().includes(keyword) ||
+        p.keypoints.toLowerCase().includes(keyword)
+      );
+      renderFilteredProducts(filtered);
+    });
   </script>
 
-  <!-- JSONP script tag to call Apps Script -->
   <script src="https://script.google.com/macros/s/AKfycbwAkBVpV_6UlBlcDl26KokzJlGBl8LM8eyLtF8VABKdz28_ttTG_EHhdlg2KdYN7HZG/exec?callback=renderProducts"></script>
 
 </body>
 </html>
+
+
+
+

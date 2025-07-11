@@ -1,89 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Admin Panel — Toy Catalog</title>
+  <meta charset="UTF-8">
+  <title>🧸 Toy Catalog Admin Dashboard</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      max-width: 600px;
-      background: #f4f4f4;
-    }
-    h2 {
-      color: #333;
-    }
-    form {
-      background: #fff;
-      padding: 20px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    input, textarea, button {
-      padding: 10px;
-      font-size: 14px;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    #responseMsg {
-      margin-top: 20px;
-      font-weight: bold;
-    }
+    body { font-family: sans-serif; padding: 30px; background: #f7f7f7; }
+    h2 { text-align: center; }
+    form { max-width: 600px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    form input, form textarea { width: 100%; margin-bottom: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    form button { padding: 10px 15px; border: none; background: #4CAF50; color: white; border-radius: 4px; cursor: pointer; }
+    table { width: 100%; max-width: 1000px; margin: 30px auto; border-collapse: collapse; background: #fff; }
+    th, td { padding: 8px 10px; border: 1px solid #ddd; text-align: left; }
+    td input { width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; }
+    td button { padding: 6px 10px; border: none; border-radius: 4px; cursor: pointer; }
+    .update-btn { background: #2196F3; color: white; }
+    .delete-btn { background: #f44336; color: white; margin-left: 6px; }
   </style>
 </head>
 <body>
 
-  <h2>🧸 Admin Panel — Add or Update Product</h2>
+  <h2>🧸 Toy Catalog Admin</h2>
 
-  <form id="productForm">
-    <input type="text" name="name" placeholder="Product Name" required />
-    <input type="number" name="price" placeholder="Price (₹)" required />
-    <textarea name="description" placeholder="Description" rows="3" required></textarea>
-    <textarea name="keypoints" placeholder="Key Features" rows="3" required></textarea>
-    <input type="number" name="quantity" placeholder="Quantity in stock" required />
-    <button type="submit">📦 Save Product</button>
+  <form id="addProductForm">
+    <h3>Add New Product</h3>
+    <input type="text" placeholder="Name" name="name" required />
+    <input type="number" placeholder="Price" name="price" required />
+    <textarea placeholder="Description" name="description"></textarea>
+    <input type="text" placeholder="Key Features" name="keypoints" />
+    <input type="number" placeholder="Quantity" name="quantity" />
+    <input type="text" placeholder="Image URL" name="image" />
+    <input type="text" placeholder="Category" name="category" />
+    <button type="submit">➕ Add Product</button>
   </form>
 
-  <p id="responseMsg"></p>
+  <table id="productTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price ₹</th>
+        <th>Description</th>
+        <th>Keypoints</th>
+        <th>Qty</th>
+        <th>Image URL</th>
+        <th>Category</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Product rows injected here -->
+    </tbody>
+  </table>
 
   <script>
-    document.getElementById("productForm").onsubmit = function (e) {
-      e.preventDefault();
+    const scriptBase = "https://script.google.com/macros/s/AKfycbwAkBVpV_6UlBlcDl26KokzJlGBl8LM8eyLtF8VABKdz28_ttTG_EHhdlg2KdYN7HZG/exec?callback=renderProducts";
 
-      const fd = new FormData(e.target);
-      const product = {
-        name: fd.get("name"),
-        price: parseFloat(fd.get("price")),
-        description: fd.get("description"),
-        keypoints: fd.get("keypoints"),
-        quantity: parseInt(fd.get("quantity"))
-      };
+    function fetchProducts() {
+      const tag = document.createElement("script");
+      tag.src = `${scriptBase}?callback=renderAdminProducts`;
+      document.body.appendChild(tag);
+    }
 
-      fetch("https://script.google.com/macros/s/AKfycbwAkBVpV_6UlBlcDl26KokzJlGBl8LM8eyLtF8VABKdz28_ttTG_EHhdlg2KdYN7HZG/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(product)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        document.getElementById("responseMsg").textContent = msg;
-        document.getElementById("productForm").reset();
-      })
-      .catch(err => {
-        document.getElementById("responseMsg").textContent = "❌ " + err.message;
+    function renderAdminProducts(data) {
+      const tbody = document.querySelector("#productTable tbody");
+      tbody.innerHTML = "";
+
+      data.forEach(product => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td><input type="text" value="${product.name}" /></td>
+          <td><input type="number" value="${product.price}" /></td>
+          <td><input type="text" value="${product.description}" /></td>
+          <td><input type="text" value="${product.keypoints}" /></td>
+          <td><input type="number" value="${product.quantity}" /></td>
+          <td><input type="text" value="${product.image}" /></td>
+          <td><input type="text" value="${product.category}" /></td>
+          <td>
+            <button class="update-btn">Update</button>
+            <button class="delete-btn">Delete</button>
+          </td>
+        `;
+
+        const inputs = tr.querySelectorAll("input");
+
+        tr.querySelector(".update-btn").onclick = () => {
+          const updatedProduct = {
+            row: product.row,
+            name: inputs[0].value,
+            price: parseFloat(inputs[1].value),
+            description: inputs[2].value,
+            keypoints: inputs[3].value,
+            quantity: parseInt(inputs[4].value),
+            image: inputs[5].value,
+            category: inputs[6].value
+          };
+
+          fetch(scriptBase, {
+            method: "POST",
+            headers: { "X-HTTP-Method-Override": "PUT", "Content-Type": "application/json" },
+            body: JSON.stringify(updatedProduct)
+          }).then(() => fetchProducts());
+        };
+
+        tr.querySelector(".delete-btn").onclick = () => {
+          fetch(`${scriptBase}?row=${product.row}`, {
+            method: "DELETE"
+          }).then(() => fetchProducts());
+        };
+
+        tbody.appendChild(tr);
       });
-    };
+    }
+
+    document.getElementById("addProductForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const newProduct = {};
+      for (let [key, value] of formData.entries()) {
+        newProduct[key] = value;
+      }
+
+      fetch(scriptBase, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProduct)
+      }).then(() => {
+        this.reset();
+        fetchProducts();
+      });
+    });
+
+    fetchProducts();
   </script>
 
 </body>
