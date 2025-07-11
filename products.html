@@ -2,61 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Incpro - Products</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>🧸 Toy Catalog</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; background: #fafafa; }
+    h2 { text-align: center; }
+    .product {
+      background: #fff;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product h3 { margin: 0 0 10px; }
+    .product p { margin: 5px 0; }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>🛒 Our Products</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="products.html">Products</a>
-      <a href="cart.html">Cart</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </header>
 
-  <section class="products">
+  <h2>🧸 Toy Catalog</h2>
+  <div id="productList">Loading products...</div>
 
-  <div class="product">
-    <a href="Products/product1.html">
-      <img src="https://drive.google.com/thumbnail?id=1KElu4RGRDbarA7_9OeUCOfff1yvC_nCD" alt="Train Toy" />
-      <h3>Train Toy</h3>
-      <p>₹799.00</p>
-    </a>
-    <a href="checkout.html?product=Train%20Toy&price=799">
-      <img src="images/buy-now.png" alt="Buy Now" class="buy-now-icon" />
-    </a>
-  </div>
+  <script>
+    function renderProducts(data) {
+      const container = document.getElementById("productList");
+      container.innerHTML = "";
 
-  <div class="product">
-    <a href="Products/product2.html">
-      <img src="https://drive.google.com/thumbnail?id=1JgHEo7hIbcbda_zkQTZ2jqbVmiCVAfG4" alt="Car Toy" />
-      <h3>Car Toy</h3>
-      <p>₹499.00</p>
-    </a>
-    <a href="checkout.html?product=Car%20Toy&price=499">
-      <img src="images/buy-now.png" alt="Buy Now" class="buy-now-icon" />
-    </a>
-  </div>
+      if (!Array.isArray(data) || data.length === 0) {
+        container.textContent = "No products available at the moment.";
+        return;
+      }
 
-  <div class="product">
-    <a href="Products/product3.html">
-      <img src="https://drive.google.com/thumbnail?id=1-HHco3t_hKGtzwIxvN9kALeiGb03W07n" alt="Gun Toy" />
-      <h3>Gun Toy</h3>
-      <p>₹999.00</p>
-       <a href="checkout.html?product=Train%20Toy&price=799">
-    <button>Buy Now</button>
-    </a>
-    <a href="checkout.html?product=Gun%20Toy&price=999">
-    </a>
-  </div>
+      data.forEach(product => {
+        const card = document.createElement("div");
+        card.className = "product";
+        card.innerHTML = `
+          <h3>${product.name}</h3>
+          <p><strong>Price:</strong> ₹${product.price}</p>
+          <p><strong>Description:</strong> ${product.description}</p>
+          <p><strong>Key Features:</strong> ${product.keypoints}</p>
+          <p><strong>In Stock:</strong> ${product.quantity}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+  </script>
 
-</section>
+  <!-- JSONP script tag to call Apps Script -->
+  <script src="https://script.google.com/macros/s/AKfycbwAkBVpV_6UlBlcDl26KokzJlGBl8LM8eyLtF8VABKdz28_ttTG_EHhdlg2KdYN7HZG/exec?callback=renderProducts"></script>
 
-  <footer>
-    <p>&copy; 2025 MyShop. Crafted with ❤️ by Sekar</p>
-  </footer>
 </body>
 </html>
